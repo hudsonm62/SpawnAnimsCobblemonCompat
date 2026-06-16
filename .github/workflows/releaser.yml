@@ -7,6 +7,15 @@ on:
         description: "Version Number (e.g. 1.0.0)"
         required: true
         type: string
+      release-type:
+        description: "Release Type"
+        required: true
+        type: choice
+        default: release
+        options:
+          - release
+          - beta
+          - alpha
 
 permissions:
   contents: write
@@ -17,6 +26,8 @@ defaults:
 
 jobs:
   gh-release:
+    outputs:
+      artifact-id: ${{ steps.upload-artifact.outputs.artifact-id }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -44,21 +55,8 @@ jobs:
           # Set output for next step
           echo "version=$Tag" >> $env:GITHUB_OUTPUT
 
-      - name: 📦 Package RP
+      - name: 📦 Package All
         run: ./package.ps1 -Version "${{ github.event.inputs.version }}"
-
-      - name: 🩹 Get Short SHA
-        id: short-sha
-        uses: hudsonm62/short-sha@v1
-
-      - name: 📤 Upload RP Artifacts
-        uses: actions/upload-artifact@v7
-        id: upload-artifact
-        with:
-          name: SpawnAnimsCobblemonCompat-${{ steps.short-sha.outputs.sha }}_${{ github.run_id }}_${{ github.run_attempt }}
-          path: SpawnAnimsCobblemonCompat-*.zip
-          if-no-files-found: error
-          compression-level: 9
 
       - name: 🏷️ Create Tag
         id: create-tag
@@ -69,6 +67,23 @@ jobs:
           git tag -a "$Tag" -m "$Tag"
           git push origin "$Tag"
 
+      - name: 🩹 Get Short SHA
+        id: short-sha
+        uses: hudsonm62/short-sha@v1
+
+      - name: 📤 Upload Artifacts
+        uses: actions/upload-artifact@v7
+        id: upload-artifact
+        with:
+          name: artifact-${{ steps.short-sha.outputs.sha }}_${{ github.run_id }}_${{ github.run_attempt }}
+          if-no-files-found: error
+          compression-level: 9
+          path: |
+            dist/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}.zip
+            dist/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}.zip
+            dist/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}+mod.jar
+            dist/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}+mod.jar
+
       - name: 🚀 Create Release
         uses: softprops/action-gh-release@v3
         with:
@@ -76,8 +91,100 @@ jobs:
           name: ${{ steps.get-tag.outputs.version }}
           generate_release_notes: false
           draft: false
-          prerelease: false
+          prerelease: ${{ github.event.inputs.release-type != 'release' }}
           append_body: true
           files: |
-            SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}.zip
-            SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}.zip
+            dist/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}.zip
+            dist/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}.zip
+            dist/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}+mod.jar
+            dist/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}+mod.jar
+
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: gh-release
+
+    steps:
+      - name: ⚙️ Checkout code
+        uses: actions/checkout@v6
+
+      - name: 📩 Download Artifacts
+        uses: actions/download-artifact@v7
+        id: download-artifact
+        with:
+          artifact-ids: ${{ needs.gh-release.outputs.artifact-id }}
+
+      - name: 🔍 Show downloaded files
+        run: Get-ChildItem -Recurse '${{ steps.download-artifact.outputs.download-path }}'
+
+      - name: 🚀 Modrinth Release (DP - Digup)
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: 49Qa4WIf
+          modrinth-token: ${{ secrets.MODRINTH_PAT }}
+          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}.zip
+          version: digup-dp_${{ github.event.inputs.version }}
+          name: Digup Variant (Datapack) ${{ github.event.inputs.version }}
+          version-type: ${{ github.event.inputs.release-type }}
+          loaders: |
+            datapack
+          game-versions: |
+            1.21.1
+            1.20.1
+          fail-mode: fail
+          dependencies: |
+            cobblemon(required)
+
+      - name: 🚀 Modrinth Release (DP - Poof)
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: 49Qa4WIf
+          modrinth-token: ${{ secrets.MODRINTH_PAT }}
+          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}.zip
+          version: poof-dp_${{ github.event.inputs.version }}
+          name: Poof Variant (Datapack) ${{ github.event.inputs.version }}
+          version-type: ${{ github.event.inputs.release-type }}
+          loaders: |
+            datapack
+          game-versions: |
+            1.21.1
+            1.20.1
+          fail-mode: fail
+          dependencies: |
+            cobblemon(required)
+
+      - name: 🚀 Modrinth Release (Mod - Digup)
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: 49Qa4WIf
+          modrinth-token: ${{ secrets.MODRINTH_PAT }}
+          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}+mod.jar
+          version: digup-mod_${{ github.event.inputs.version }}
+          name: Digup Variant (Mod) ${{ github.event.inputs.version }}
+          version-type: ${{ github.event.inputs.release-type }}
+          loaders: |
+            fabric
+            neoforge
+          game-versions: |
+            1.21.1
+          fail-mode: fail
+          dependencies: |
+            cobblemon(required)
+
+      - name: 🚀 Modrinth Release (Mod - Poof)
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: 49Qa4WIf
+          modrinth-token: ${{ secrets.MODRINTH_PAT }}
+          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}+mod.jar
+          version: poof-mod_${{ github.event.inputs.version }}
+          name: Poof Variant (Mod) ${{ github.event.inputs.version }}
+          version-type: ${{ github.event.inputs.release-type }}
+          loaders: |
+            fabric
+            neoforge
+          game-versions: |
+            1.21.1
+          fail-mode: fail
+          dependencies: |
+            cobblemon(required)

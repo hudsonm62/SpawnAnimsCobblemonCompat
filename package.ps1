@@ -71,6 +71,13 @@ function Format-Template {
     Copy-Item -Force `
         -Path (Join-Path $PSScriptRoot "meta/pack.png") `
         -Destination (Join-Path $PSScriptRoot "build/$variantKey/pack.png")
+
+    # copy shared files
+    $shared = Join-Path $PSScriptRoot "shared"
+    $SharedFiles = Get-ChildItem -Path $shared # all top level copied as is
+    foreach ($file in $SharedFiles) {
+        Copy-Item -Path $file.FullName -Destination (Join-Path "build/$variantKey/data" $file.Name) -Force -Recurse
+    }
 }
 
 # Copy repo files to the build directories

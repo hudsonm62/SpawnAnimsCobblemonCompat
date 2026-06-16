@@ -2,7 +2,7 @@
     "schemaVersion": 1,
     "environment": "*",
     "entrypoints": {},
-    "id": "spawnanimations_cobblemoncompat",
+    "id": "spawnanimations_cobblemon",
     "version": "${version}+mod",
     "name": "Spawn Animations - Cobblemon Compat (${variant})",
     "description": "A datapack that adds compatibility for Spawn Animations with Cobblemon.",

@@ -6,7 +6,7 @@ logoBlur=false
 showAsDataPack=true
 
 [[mods]]
-modId="spawnanimations_cobblemoncompat"
+modId="spawnanimations_cobblemon"
 version="${version}+mod"
 displayName="Spawn Animations - Cobblemon Compat (${variant})"
 description='''
@@ -19,14 +19,14 @@ updateJSONURL="https://api.modrinth.com/updates/49Qa4WIf/forge_updates.json?neof
 displayTest="IGNORE_SERVER_VERSION"
 features={ java_version = "[21,)" }
 
-[[dependencies.spawnanimations_cobblemoncompat]]
+[[dependencies.spawnanimations_cobblemon]]
     modId="minecraft"
     type="required"
     versionRange="[1.21.1]"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.spawnanimations_cobblemoncompat]]
+[[dependencies.spawnanimations_cobblemon]]
     modId="cobblemon"
     type="required"
     versionRange="[1.6,)"

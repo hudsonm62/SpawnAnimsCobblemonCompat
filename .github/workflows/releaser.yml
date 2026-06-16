@@ -123,7 +123,7 @@ jobs:
           modrinth-id: 49Qa4WIf
           modrinth-token: ${{ secrets.MODRINTH_PAT }}
           files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}.zip
-          version: digup-dp_${{ github.event.inputs.version }}
+          version: dp-digup_${{ github.event.inputs.version }}
           name: Digup Variant (Datapack) ${{ github.event.inputs.version }}
           version-type: ${{ github.event.inputs.release-type }}
           loaders: |
@@ -141,7 +141,7 @@ jobs:
           modrinth-id: 49Qa4WIf
           modrinth-token: ${{ secrets.MODRINTH_PAT }}
           files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}.zip
-          version: poof-dp_${{ github.event.inputs.version }}
+          version: dp-poof_${{ github.event.inputs.version }}
           name: Poof Variant (Datapack) ${{ github.event.inputs.version }}
           version-type: ${{ github.event.inputs.release-type }}
           loaders: |
@@ -159,7 +159,7 @@ jobs:
           modrinth-id: 49Qa4WIf
           modrinth-token: ${{ secrets.MODRINTH_PAT }}
           files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}+mod.jar
-          version: digup-mod_${{ github.event.inputs.version }}
+          version: mod-digup_${{ github.event.inputs.version }}
           name: Digup Variant (Mod) ${{ github.event.inputs.version }}
           version-type: ${{ github.event.inputs.release-type }}
           loaders: |
@@ -177,7 +177,7 @@ jobs:
           modrinth-id: 49Qa4WIf
           modrinth-token: ${{ secrets.MODRINTH_PAT }}
           files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}+mod.jar
-          version: poof-mod_${{ github.event.inputs.version }}
+          version: mod-poof_${{ github.event.inputs.version }}
           name: Poof Variant (Mod) ${{ github.event.inputs.version }}
           version-type: ${{ github.event.inputs.release-type }}
           loaders: |

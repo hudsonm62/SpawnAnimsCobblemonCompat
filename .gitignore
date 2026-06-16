@@ -3,3 +3,8 @@ src/**/README.md
 .scratchpath/*
 
 *.zip
+*.jar
+
+# Ignore build output
+build/
+dist/

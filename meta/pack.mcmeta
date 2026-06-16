@@ -1,0 +1,10 @@
+{
+    "id": "spawnanimations_cobblemon",
+    "pack": {
+        "pack_format": ${pack_format},
+        "supported_formats": [${pack_format}, ${max_pack_format}],
+        "min_format": ${pack_format},
+        "max_format": ${max_pack_format},
+        "description": "Spawn Animations - Cobblemon Compat ${version} (${variant})"
+    }
+}

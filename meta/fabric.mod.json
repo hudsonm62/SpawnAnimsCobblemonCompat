@@ -1,0 +1,21 @@
+{
+    "schemaVersion": 1,
+    "environment": "*",
+    "entrypoints": {},
+    "id": "spawnanimations_cobblemoncompat",
+    "version": "${version}+mod",
+    "name": "Spawn Animations - Cobblemon Compat (${variant})",
+    "description": "A datapack that adds compatibility for Spawn Animations with Cobblemon.",
+    "license": "Apache-2.0",
+    "icon": "pack.png",
+    "authors": ["Hudson M."],
+    "contact": {
+        "sources": "https://github.com/hudsonm62/SpawnAnimsCobblemonCompat",
+        "issues": "https://github.com/hudsonm62/SpawnAnimsCobblemonCompat/issues"
+    },
+    "depends": {
+        "minecraft": "1.21.1",
+        "cobblemon": ">=1.6",
+        "java": ">=8"
+    }
+}

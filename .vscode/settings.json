@@ -10,5 +10,6 @@
     "editor.tabSize": 4,
 
     "git.enableCommitSigning": true,
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "cSpell.words": ["datapack", "Digup", "janky"]
 }

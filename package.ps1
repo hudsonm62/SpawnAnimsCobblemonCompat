@@ -41,33 +41,36 @@ function Format-Template {
 }
 
 # Build out the template variables
-@("Poof", "Digup") | ForEach-Object {
-    $variant = $_
+@("poof", "digup") | ForEach-Object {
+    $variantKey = $_
+    $variantName = (Get-Culture).TextInfo.ToTitleCase($variantKey)
 
     Format-Template <# Datapack #> `
-        -TemplatePath "meta/pack.mcmeta" -OutputPath "build/$variant/pack.mcmeta" `
+        -TemplatePath "meta/pack.mcmeta" -OutputPath "build/$variantKey/pack.mcmeta" `
         -Variables @{
             version = $Version
-            variant = $variant
+            variant = $variantName
             pack_format = "15"
             max_pack_format = "48"
         }
 
     Format-Template <# Neoforge #> `
-        -TemplatePath "meta/META-INF/neoforge.mods.toml" -OutputPath "build/$variant/META-INF/neoforge.mods.toml" `
+        -TemplatePath "meta/META-INF/neoforge.mods.toml" -OutputPath "build/$variantKey/META-INF/neoforge.mods.toml" `
         -Variables @{
             version = $Version
-            variant = $variant
+            variant = $variantName
         }
 
     Format-Template <# Fabric #> `
-        -TemplatePath "meta/fabric.mod.json" -OutputPath "build/$variant/fabric.mod.json" `
+        -TemplatePath "meta/fabric.mod.json" -OutputPath "build/$variantKey/fabric.mod.json" `
         -Variables @{
             version = $Version
-            variant = $variant
+            variant = $variantName
         }
 
-    Copy-Item -Path (Join-Path $PSScriptRoot "meta/pack.png") -Destination (Join-Path $PSScriptRoot "build/$variant/pack.png") -Force -ErrorAction Stop
+    Copy-Item -Force `
+        -Path (Join-Path $PSScriptRoot "meta/pack.png") `
+        -Destination (Join-Path $PSScriptRoot "build/$variantKey/pack.png")
 }
 
 # Copy repo files to the build directories
@@ -103,7 +106,7 @@ function Compress-Directory {
     )
     try { [System.IO.Compression.ZipFile] | out-null } catch { Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction Stop }
     if (Test-Path $OutputDir) {
-        Remove-Item $OutputDir -Force
+        Remove-Item $OutputDir -Force -ErrorAction Stop
     }
     [System.IO.Compression.ZipFile]::CreateFromDirectory($SourceDir, $OutputDir)
     return Get-Item -Path $OutputDir -Force

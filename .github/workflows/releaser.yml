@@ -134,6 +134,7 @@ jobs:
           fail-mode: fail
           dependencies: |
             cobblemon(required)
+            spawn-animations(required)
 
       - name: 🚀 Modrinth Release (DP - Poof)
         uses: Kir-Antipov/mc-publish@v3.3
@@ -152,24 +153,7 @@ jobs:
           fail-mode: fail
           dependencies: |
             cobblemon(required)
-
-      - name: 🚀 Modrinth Release (Mod - Digup)
-        uses: Kir-Antipov/mc-publish@v3.3
-        with:
-          modrinth-id: 49Qa4WIf
-          modrinth-token: ${{ secrets.MODRINTH_PAT }}
-          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}+mod.jar
-          version: mod-digup_${{ github.event.inputs.version }}
-          name: Digup Variant (Mod) ${{ github.event.inputs.version }}
-          version-type: ${{ github.event.inputs.release-type }}
-          loaders: |
-            fabric
-            neoforge
-          game-versions: |
-            1.21.1
-          fail-mode: fail
-          dependencies: |
-            cobblemon(required)
+            spawn-animations(required)
 
       - name: 🚀 Modrinth Release (Mod - Poof)
         uses: Kir-Antipov/mc-publish@v3.3
@@ -188,3 +172,23 @@ jobs:
           fail-mode: fail
           dependencies: |
             cobblemon(required)
+            spawn-animations(required)
+
+      - name: 🚀 Modrinth Release (Mod - Digup)
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: 49Qa4WIf
+          modrinth-token: ${{ secrets.MODRINTH_PAT }}
+          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}+mod.jar
+          version: mod-digup_${{ github.event.inputs.version }}
+          name: Digup Variant (Mod) ${{ github.event.inputs.version }}
+          version-type: ${{ github.event.inputs.release-type }}
+          loaders: |
+            fabric
+            neoforge
+          game-versions: |
+            1.21.1
+          fail-mode: fail
+          dependencies: |
+            cobblemon(required)
+            spawn-animations(required)

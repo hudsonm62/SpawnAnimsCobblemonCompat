@@ -3,7 +3,7 @@
         "condition": "minecraft:inverted",
         "term": {
             "condition": "minecraft:reference",
-            "name": "spawnanimations:is_player_mon"
+            "name": "spawnanimations:has_owner"
         }
     },
     {

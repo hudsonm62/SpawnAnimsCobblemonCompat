@@ -149,7 +149,6 @@ jobs:
             datapack
           game-versions: |
             1.21.1
-            1.20.1
           fail-mode: fail
           dependencies: |
             cobblemon(required)
@@ -168,7 +167,6 @@ jobs:
             datapack
           game-versions: |
             1.21.1
-            1.20.1
           fail-mode: fail
           dependencies: |
             cobblemon(required)

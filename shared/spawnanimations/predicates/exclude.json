@@ -3,13 +3,6 @@
         "condition": "minecraft:inverted",
         "term": {
             "condition": "minecraft:reference",
-            "name": "spawnanimations:has_owner"
-        }
-    },
-    {
-        "condition": "minecraft:inverted",
-        "term": {
-            "condition": "minecraft:reference",
             "name": "spawnanimations:is_uncatchable"
         }
     },

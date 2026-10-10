@@ -52,6 +52,7 @@ function Format-Template {
             variant = $variantName
             pack_format = "15"
             max_pack_format = "48"
+            variant_lower = $variantKey
         }
 
     Format-Template <# Neoforge #> `
@@ -59,6 +60,7 @@ function Format-Template {
         -Variables @{
             version = $Version
             variant = $variantName
+            variant_lower = $variantKey
         }
 
     Format-Template <# Fabric #> `
@@ -66,6 +68,7 @@ function Format-Template {
         -Variables @{
             version = $Version
             variant = $variantName
+            variant_lower = $variantKey
         }
 
     Copy-Item -Force `
@@ -122,12 +125,12 @@ function Compress-Directory {
 New-Item -ItemType Directory -Path "dist" -Force | Out-Null
 
 # package mods
-$poofMod = Compress-Directory -SourceDir "build/poof" -OutputDir "dist/$Name-poof_$Version+mod.jar"
-$digupMod = Compress-Directory -SourceDir "build/digup" -OutputDir "dist/$Name-digup_$Version+mod.jar"
+$poofMod = Compress-Directory -SourceDir "build/poof" -OutputDir "dist/${Name}-$Version+poof_mod.jar"
+$digupMod = Compress-Directory -SourceDir "build/digup" -OutputDir "dist/${Name}-$Version+digup_mod.jar"
 
 # package datapacks
-$poofDatapack = Compress-Directory -SourceDir "build/poof" -OutputDir "dist/$Name-poof_$Version.zip"
-$digupDatapack = Compress-Directory -SourceDir "build/digup" -OutputDir "dist/$Name-digup_$Version.zip"
+$poofDatapack = Compress-Directory -SourceDir "build/poof" -OutputDir "dist/${Name}-$Version+poof.zip"
+$digupDatapack = Compress-Directory -SourceDir "build/digup" -OutputDir "dist/${Name}-$Version+digup.zip"
 
 return @(
     $digupMod,

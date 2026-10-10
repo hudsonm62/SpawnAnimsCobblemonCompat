@@ -7,7 +7,7 @@ showAsDataPack=true
 
 [[mods]]
 modId="spawnanimations_cobblemon"
-version="${version}+mod"
+version="${version}+${variant_lower}_mod"
 displayName="Spawn Animations - Cobblemon Compat (${variant})"
 description='''
 A datapack that adds compatibility for Spawn Animations with Cobblemon.

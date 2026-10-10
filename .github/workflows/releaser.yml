@@ -58,6 +58,25 @@ jobs:
       - name: 📦 Package All
         run: ./package.ps1 -Version "${{ github.event.inputs.version }}"
 
+      - name: 🔍 Validate Release Assets
+        run: |
+          $Version = "${{ github.event.inputs.version }}"
+          $Base = "dist/SpawnAnimsCobblemonCompat-$Version"
+
+          $Files = @(
+            "$Base+poof.zip"
+            "$Base+digup.zip"
+            "$Base+poof_mod.jar"
+            "$Base+digup_mod.jar"
+          )
+
+          foreach ($File in $Files) {
+            if (-not (Test-Path -LiteralPath $File -PathType Leaf)) {
+              throw "❌ Missing release asset: $File"
+            }
+            Write-Host "✅ Found: $File"
+          }
+
       - name: 🏷️ Create Tag
         id: create-tag
         run: |
@@ -79,10 +98,10 @@ jobs:
           if-no-files-found: error
           compression-level: 9
           path: |
-            dist/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}.zip
-            dist/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}.zip
-            dist/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}+mod.jar
-            dist/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}+mod.jar
+            dist/SpawnAnimsCobblemonCompat-${{ github.event.inputs.version }}+poof.zip
+            dist/SpawnAnimsCobblemonCompat-${{ github.event.inputs.version }}+digup.zip
+            dist/SpawnAnimsCobblemonCompat-${{ github.event.inputs.version }}+poof_mod.jar
+            dist/SpawnAnimsCobblemonCompat-${{ github.event.inputs.version }}+digup_mod.jar
 
       - name: 🚀 Create Release
         uses: softprops/action-gh-release@v3
@@ -94,10 +113,10 @@ jobs:
           prerelease: ${{ github.event.inputs.release-type != 'release' }}
           append_body: true
           files: |
-            dist/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}.zip
-            dist/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}.zip
-            dist/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}+mod.jar
-            dist/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}+mod.jar
+            dist/SpawnAnimsCobblemonCompat-${{ github.event.inputs.version }}+poof.zip
+            dist/SpawnAnimsCobblemonCompat-${{ github.event.inputs.version }}+digup.zip
+            dist/SpawnAnimsCobblemonCompat-${{ github.event.inputs.version }}+poof_mod.jar
+            dist/SpawnAnimsCobblemonCompat-${{ github.event.inputs.version }}+digup_mod.jar
 
   publish:
     runs-on: ubuntu-latest
@@ -117,14 +136,14 @@ jobs:
       - name: 🔍 Show downloaded files
         run: Get-ChildItem -Recurse '${{ steps.download-artifact.outputs.download-path }}'
 
-      - name: 🚀 Modrinth Release (DP - Digup)
+      - name: 🚀 Modrinth Release (DP - Poof)
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-id: 49Qa4WIf
           modrinth-token: ${{ secrets.MODRINTH_PAT }}
-          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}.zip
-          version: dp-digup_${{ github.event.inputs.version }}
-          name: Digup Variant (Datapack) ${{ github.event.inputs.version }}
+          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-${{ github.event.inputs.version }}+poof.zip
+          version: ${{ github.event.inputs.version }}+poof
+          name: Poof Variant (Datapack) ${{ github.event.inputs.version }}
           version-type: ${{ github.event.inputs.release-type }}
           loaders: |
             datapack
@@ -136,14 +155,14 @@ jobs:
             cobblemon(required)
             spawn-animations(required)
 
-      - name: 🚀 Modrinth Release (DP - Poof)
+      - name: 🚀 Modrinth Release (DP - Digup)
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-id: 49Qa4WIf
           modrinth-token: ${{ secrets.MODRINTH_PAT }}
-          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}.zip
-          version: dp-poof_${{ github.event.inputs.version }}
-          name: Poof Variant (Datapack) ${{ github.event.inputs.version }}
+          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-${{ github.event.inputs.version }}+digup.zip
+          version: ${{ github.event.inputs.version }}+digup
+          name: Digup Variant (Datapack) ${{ github.event.inputs.version }}
           version-type: ${{ github.event.inputs.release-type }}
           loaders: |
             datapack
@@ -160,8 +179,8 @@ jobs:
         with:
           modrinth-id: 49Qa4WIf
           modrinth-token: ${{ secrets.MODRINTH_PAT }}
-          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-poof_${{ github.event.inputs.version }}+mod.jar
-          version: mod-poof_${{ github.event.inputs.version }}
+          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-${{ github.event.inputs.version }}+poof_mod.jar
+          version: ${{ github.event.inputs.version }}+poof_mod
           name: Poof Variant (Mod) ${{ github.event.inputs.version }}
           version-type: ${{ github.event.inputs.release-type }}
           loaders: |
@@ -179,8 +198,8 @@ jobs:
         with:
           modrinth-id: 49Qa4WIf
           modrinth-token: ${{ secrets.MODRINTH_PAT }}
-          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-digup_${{ github.event.inputs.version }}+mod.jar
-          version: mod-digup_${{ github.event.inputs.version }}
+          files: ${{ steps.download-artifact.outputs.download-path }}/SpawnAnimsCobblemonCompat-${{ github.event.inputs.version }}+digup_mod.jar
+          version: ${{ github.event.inputs.version }}+digup_mod
           name: Digup Variant (Mod) ${{ github.event.inputs.version }}
           version-type: ${{ github.event.inputs.release-type }}
           loaders: |

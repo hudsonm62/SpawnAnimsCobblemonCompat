@@ -1,0 +1,8 @@
+{
+    "condition": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+        "type": "cobblemon:pokemon",
+        "nbt": "{Pokemon:{PokemonOriginalTrainerType:\"NPC\"}}"
+    }
+}

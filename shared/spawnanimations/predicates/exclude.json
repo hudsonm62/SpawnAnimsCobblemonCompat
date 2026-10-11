@@ -3,6 +3,27 @@
         "condition": "minecraft:inverted",
         "term": {
             "condition": "minecraft:reference",
+            "name": "spawnanimations:is_player_mon"
+        }
+    },
+    {
+        "condition": "minecraft:inverted",
+        "term": {
+            "condition": "minecraft:reference",
+            "name": "spawnanimations:is_npc_mon"
+        }
+    },
+    {
+        "condition": "minecraft:inverted",
+        "term": {
+            "condition": "minecraft:reference",
+            "name": "spawnanimations:has_owned_behaviour"
+        }
+    },
+    {
+        "condition": "minecraft:inverted",
+        "term": {
+            "condition": "minecraft:reference",
             "name": "spawnanimations:is_uncatchable"
         }
     },

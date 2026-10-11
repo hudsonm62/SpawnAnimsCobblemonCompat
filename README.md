@@ -13,6 +13,9 @@ Cobblemon uses custom natural spawning mechanics, which are not entirely compati
 - Don't use the "Vanilla" activation mode, as it will cause Pokemon to spawn without any animation at all.
 - Increase the Activation Distance to 40 or higher blocks to prevent Pokemon from bugging out in the distance with the Digup variant.
     - For some reason, Pokemon don't hide underground so they will be visible until they are close enough to the player to trigger the animation, which looks janky.
+- Some NPC mons may trigger spawn animations unexpectedly.
+    - This can happen depending on how the NPC mons are configured and whether they have owned behaviour correctly set up.
+    - If you're a pack maker, ensure either it's mons are spawned `uncatchable`, and/or have the `cobblemon:pokemon_follows_owner` behaviour enabled.
 
 ## License
 
